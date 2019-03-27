@@ -13,11 +13,9 @@ namespace ConsCRUD.Data
 
         public RepoMongo()
         {
-            var client = new MongoClient("mongodb://localhost:27017");
+            var client = new MongoClient(Program.MongoString);
             var database = client.GetDatabase("BooksDb2");
-
             _books = database.GetCollection<Book>("Books");
-
          }
 
         public Book Create(Book book)
