@@ -19,10 +19,10 @@ namespace ConsCRUD
                 switch (cmd)
                 {
                     case "B":
-                        new BookController(new RepoM()).Run();
+                        new BookController(new RepoMongo()).Run();
                         break;
                     case "R":
-                        new BookController(new RepoM()).Run();
+                        new BookController(new RepoMongo()).Run();
                         break;
                     case "F":
                         break;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,7 +8,9 @@ namespace ConsCRUD.Models
 {
     class Book
     {
-        public int Id { set; get; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { set; get; }
         public string Title { set; get; }
         public string Author { set; get; }
 

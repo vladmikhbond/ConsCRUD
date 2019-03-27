@@ -66,7 +66,7 @@ namespace ConsCRUD.Controllers
         private void UpdateBooks()
         {
             Console.Write("Book Id > ");
-            int.TryParse(Console.ReadLine(), out int id);
+            string id = Console.ReadLine();
 
             Book book = _repo.Read(id);
             if (book == null)
@@ -87,7 +87,7 @@ namespace ConsCRUD.Controllers
         private void DeleteBooks()
         {
             Console.Write("Book Id > ");
-            int.TryParse(Console.ReadLine(), out int id);
+            string id = Console.ReadLine();
 
             Book book = _repo.Read(id);
             if (book == null)
