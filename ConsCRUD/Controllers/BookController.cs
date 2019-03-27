@@ -1,8 +1,6 @@
 ﻿using ConsCRUD.Data;
 using ConsCRUD.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsCRUD.Controllers
 {
@@ -15,56 +13,62 @@ namespace ConsCRUD.Controllers
             _repo = repo;
         }
 
+        // controller loop
+        //
         public void Run()
         {
             while (true)
             {
-                Console.Write("C R U D b > ");
+                Console.Write("C R U D E > ");
                 string cmd = Console.ReadLine().ToUpper();
                 switch (cmd)
                 {
                     case "C":
-                        CreateBook();
+                        Create();
                         break;
                     case "R":
-                        ReadBooks();
+                        Read();
                         break;
                     case "U":
-                        UpdateBooks();
+                        Update();
                         break;
                     case "D":
-                        DeleteBooks();
+                        Delete();
                         break;
-                    case "B":
+                    case "E":
                         return;
                 }
             }
         }
 
-        private void CreateBook()
+        private void Create()
         {
+            // get params
             Console.Write("Book Title > ");
             string title = Console.ReadLine();
             Console.Write("Book Author > ");
             string author = Console.ReadLine();
             Book newBook = new Book { Title = title, Author = author };   
-            
+            // do operation
             var book = _repo.Create(newBook);
-
+            // show result
             Console.WriteLine(">>> " + book);
         }
 
-        private void ReadBooks()
+        private void Read()
         {
+            // do operation
             var books = _repo.Read();
+            // show result
             foreach (var book in books)
             {
                 Console.WriteLine(">>> " + book);
             }
         }
 
-        private void UpdateBooks()
+        private void Update()
         {
+            // get params
             Console.Write("Book Id > ");
             string id = Console.ReadLine();
 
@@ -79,13 +83,15 @@ namespace ConsCRUD.Controllers
             Console.Write($"Book Author ({book.Author})> ");
             book.Author = Console.ReadLine();
 
+            // do operation
             _repo.Update(id, book);
-
+            // show result
             Console.WriteLine(">>> " + book);
         }
 
-        private void DeleteBooks()
+        private void Delete()
         {
+            // get params
             Console.Write("Book Id > ");
             string id = Console.ReadLine();
 
@@ -95,13 +101,17 @@ namespace ConsCRUD.Controllers
                 Console.WriteLine("Wrong Book Id.");
                 return;
             }
+            // confirmation
             Console.Write($"Delete {book.Title} ? (Y, N)> ");
             string answer = Console.ReadLine().ToUpper();
-            if (answer == "Y")
-            {
-                _repo.Delete(id);
-                Console.WriteLine("Book was deleted.");
-            }
+            if (answer != "Y")
+                return;
+            
+            // do operation
+            _repo.Delete(id);
+            // show result
+            Console.WriteLine("Book was deleted.");
+            
         }
 
     }

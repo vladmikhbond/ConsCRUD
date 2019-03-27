@@ -1,20 +1,27 @@
-﻿using Microsoft.Extensions.Configuration;
-
+﻿using ConsCRUD.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsCRUD
 {
     class Program
     {
-        public static string MongoString;
+        public static IConfigurationRoot Configuration;
+        public static ServiceProvider Services;
 
         static void Main(string[] args)
         {
+            // configuration provider
             var builder = new ConfigurationBuilder();
             builder.AddJsonFile("appsettings.json");
-            IConfigurationRoot config = builder.Build();
+            Configuration = builder.Build();
 
-            MongoString = config["mongoString"];
-
+            // service provider
+            IServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection.AddTransient<IRepo>(
+                (_) => new RepoMongo(Configuration["mongoString"]));
+            Services = serviceCollection.BuildServiceProvider();
+                  
             Applcation.Run();
         }
     }

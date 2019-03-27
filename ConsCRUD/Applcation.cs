@@ -1,8 +1,7 @@
 ﻿using ConsCRUD.Controllers;
 using ConsCRUD.Data;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsCRUD
 {
@@ -12,6 +11,8 @@ namespace ConsCRUD
         //
         public static void Run()
         {
+            IRepo repo = Program.Services.GetRequiredService<IRepo>();
+
             while (true)
             {
                 Console.Write("[B]ooks, [R]eaders, [F]ormulars, [E]xit \n> ");
@@ -19,10 +20,10 @@ namespace ConsCRUD
                 switch (cmd)
                 {
                     case "B":
-                        new BookController(new RepoMongo()).Run();
+                        new BookController(repo).Run();
                         break;
                     case "R":
-                        new BookController(new RepoMongo()).Run();
+                        new BookController(repo).Run();
                         break;
                     case "F":
                         break;

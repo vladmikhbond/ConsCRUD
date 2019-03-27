@@ -11,12 +11,20 @@ namespace ConsCRUD.Data
         private readonly IMongoCollection<Book> _books;
 
 
-        public RepoMongo()
+        public RepoMongo(string conStr)
         {
-            var client = new MongoClient(Program.MongoString);
-            var database = client.GetDatabase("BooksDb2");
-            _books = database.GetCollection<Book>("Books");
-         }
+            var client = new MongoClient(conStr);
+            var db = client.GetDatabase("BooksDb2");
+            _books = db.GetCollection<Book>("Books");
+
+            // test data
+            if (_books.CountDocuments(_ => true) == 0)
+            {
+                _books.InsertOne(new Book { Title = "Title1", Author = "Author1" });
+                _books.InsertOne(new Book { Title = "Title2", Author = "Author2" });
+                _books.InsertOne(new Book { Title = "Title3", Author = "Author3" });
+            }
+        }
 
         public Book Create(Book book)
         {
@@ -26,13 +34,12 @@ namespace ConsCRUD.Data
 
         public List<Book> Read()
         {
-            return _books.Find(book => true).ToList();
+            return _books.Find(_ => true).ToList();
         }
-
 
         public Book Read(string id)
         {
-            return _books.Find<Book>(book => book.Id == id).FirstOrDefault();
+            return _books.Find(b => b.Id == id).FirstOrDefault();
         }
 
         public void Update(string id, Book book)
