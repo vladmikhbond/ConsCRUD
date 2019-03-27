@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ConsCRUD.Controllers;
+using ConsCRUD.Data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,48 +8,28 @@ namespace ConsCRUD
 {
     class Applcation
     {
+        // Infinite loop
+        //
         public static void Run()
         {
-            while (true) {
-                Console.Write("CRUD > ");
+            while (true)
+            {
+                Console.Write("[B]ooks, [R]eaders, [F]ormulars, [E]xit \n> ");
                 string cmd = Console.ReadLine().ToUpper();
-                switch (cmd) {
-                    case "C":
-                        CreateBook();
+                switch (cmd)
+                {
+                    case "B":
+                        new BookController(new RepoM()).Run();
                         break;
                     case "R":
-                        ReadBooks();
+                        new BookController(new RepoM()).Run();
                         break;
-                    case "U":
+                    case "F":
                         break;
-                    case "D":
-                        break;
-                    case "B":
+                    case "E":
                         return;
                 }
             }
-        }
-
-        private static void CreateBook()
-        {
-            Console.Write("Book Title> ");
-            string title = Console.ReadLine();
-            Console.Write("Book Author> ");
-            string author = Console.ReadLine();
-            Book newBook = new Book { Title = title, Author = author };
-
-            IRepo repo = new RepoM();
-            var book = repo.Create(newBook);
-
-            Console.WriteLine(">>> " + book);
-        }
-
-        private static void ReadBooks()
-        {
-            IRepo repo = new RepoM();
-            var books = repo.Read();
-
-            Console.WriteLine(">>> " + books);
         }
 
     }
