@@ -19,13 +19,18 @@ namespace ConsCRUD
             // services provider
             IServiceCollection serviceCollection = new ServiceCollection();
             ///////
+            //
             // serviceCollection.AddTransient<IRepo>(
             //     (_) => new RepoMongo(Configuration["mongoString"]));
             //
             // serviceCollection.AddTransient<IRepo, RepoMemo>();
-
+            //
+            //serviceCollection.AddTransient<IRepo>(
+            //    (_) => new RepoAdoNet(Configuration["adoString"]));
+            //
             serviceCollection.AddTransient<IRepo>(
-                (_) => new RepoAdoNet(Configuration["adoString"]));
+                  (_) => new RepoEF(Configuration["adoString"]));
+            //
             ///////
             Services = serviceCollection.BuildServiceProvider();
                   
