@@ -1,6 +1,8 @@
 ﻿using ConsCRUD.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Reflection;
 
 namespace ConsCRUD
 {
@@ -12,26 +14,37 @@ namespace ConsCRUD
         static void Main(string[] args)
         {
             // configuration provider
+            //
             var builder = new ConfigurationBuilder();
             builder.AddJsonFile("appsettings.json");
             Configuration = builder.Build();
-
-            // services provider
+            //
+            // services 
+            //
             IServiceCollection serviceCollection = new ServiceCollection();
-            ///////
+            // select repo type
+            string repoName = Configuration["repository"].ToLower();
+            switch (repoName) {
+                case "memo":
+                    serviceCollection.AddSingleton<IRepo, RepoMemo>();
+                    break;
+                case "mongo":
+                    serviceCollection.AddSingleton<IRepo>( 
+                        _ => new RepoMongo(Configuration["conString:mongo"]));
+                    break;
+                case "ado":
+                    serviceCollection.AddSingleton<IRepo>( 
+                        _ => new RepoAdoNet(Configuration["conString:ado"]));
+                    break;
+                case "ef":
+                    serviceCollection.AddSingleton<IRepo>( 
+                        _ => new RepoEF(Configuration["conString:ado"]));
+                    break;
+            }
+            Console.WriteLine("Repository: " + repoName);
             //
-            // serviceCollection.AddSingleton<IRepo, RepoMemo>();
+            // loop
             //
-            // serviceCollection.AddSingleton<IRepo>(
-            //     (_) => new RepoMongo(Configuration["mongoString"]));
-            //
-            //serviceCollection.AddSingleton<IRepo>(
-            //    (_) => new RepoAdoNet(Configuration["adoString"]));
-            //
-            serviceCollection.AddSingleton<IRepo>(
-                  (_) => new RepoEF(Configuration["adoString"]));
-            //
-            ///////
             using (Services = serviceCollection.BuildServiceProvider())
             {
                 Applcation.Run();

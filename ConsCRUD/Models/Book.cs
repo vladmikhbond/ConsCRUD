@@ -1,8 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsCRUD.Models
 {
@@ -22,6 +19,6 @@ namespace ConsCRUD.Models
         public string Author { set; get; }
 
         public override string ToString() => 
-            $"Id={Id}  Title='{Title}'  Author='{Author}'";
+            $"Id= {Id}  Title='{Title}'  Author='{Author}'";
     }
 }

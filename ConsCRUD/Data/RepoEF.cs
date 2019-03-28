@@ -10,18 +10,18 @@ namespace ConsCRUD.Data
 {
     class RepoEF: DbContext, IRepo
     {        
-        readonly string _conStr;
+        private readonly string _conStr;
 
         public DbSet<Book> Books { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_conStr);
-        }
 
         public RepoEF(string conStr)
         {
             _conStr = conStr;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(_conStr);
         }
 
         public Book Create(Book book)
