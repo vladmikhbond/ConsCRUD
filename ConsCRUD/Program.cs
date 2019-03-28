@@ -20,21 +20,22 @@ namespace ConsCRUD
             IServiceCollection serviceCollection = new ServiceCollection();
             ///////
             //
-            // serviceCollection.AddTransient<IRepo>(
+            // serviceCollection.AddSingleton<IRepo, RepoMemo>();
+            //
+            // serviceCollection.AddSingleton<IRepo>(
             //     (_) => new RepoMongo(Configuration["mongoString"]));
             //
-            // serviceCollection.AddTransient<IRepo, RepoMemo>();
-            //
-            //serviceCollection.AddTransient<IRepo>(
+            //serviceCollection.AddSingleton<IRepo>(
             //    (_) => new RepoAdoNet(Configuration["adoString"]));
             //
-            serviceCollection.AddTransient<IRepo>(
+            serviceCollection.AddSingleton<IRepo>(
                   (_) => new RepoEF(Configuration["adoString"]));
             //
             ///////
-            Services = serviceCollection.BuildServiceProvider();
-                  
-            Applcation.Run();
+            using (Services = serviceCollection.BuildServiceProvider())
+            {
+                Applcation.Run();
+            }
         }
     }
 }
