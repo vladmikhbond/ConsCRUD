@@ -6,6 +6,13 @@ using System.Text;
 
 namespace ConsCRUD.Models
 {
+ //   CREATE TABLE [dbo].[Books]
+ //   (
+ //       [Id] NVARCHAR(50) NOT NULL PRIMARY KEY, 
+ //       [Title] NVARCHAR(250) NOT NULL, 
+ //       [Author] NVARCHAR(250) NOT NULL
+ //   )
+
     class Book
     {
         [BsonId]

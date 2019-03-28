@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using ConsCRUD.Models;
-using MongoDB.Driver;
 
 namespace ConsCRUD.Data
 {
-    class RepoAdo: IRepo
+    class RepoAdoNet: IRepo
     {        
         readonly string _conStr;
 
-        public RepoAdo(string conStr)
+        public RepoAdoNet(string conStr)
         {
             _conStr = conStr;
         }
@@ -22,18 +20,19 @@ namespace ConsCRUD.Data
             string sql = @"INSERT INTO Books (Id, Title, Author) 
                         VALUES (@Id, @Title, @Author) ";
 
-            var con = new SqlConnection(_conStr);
-            SqlCommand command = new SqlCommand(sql, con);
-            string id = Guid.NewGuid().ToString();
-            command.Parameters.AddWithValue("@Id", id);
-            command.Parameters.AddWithValue("@Title", book.Title);
-            command.Parameters.AddWithValue("@Author", book.Author);
-            con.Open();
-            using (con)
-            {
-                command.ExecuteNonQuery();
-            }
-            book.Id = id;
+            using (var con = new SqlConnection(_conStr) )
+            {                
+                using (SqlCommand command = new SqlCommand(sql, con))
+                {
+                    string id = Guid.NewGuid().ToString();
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@Title", book.Title);
+                    command.Parameters.AddWithValue("@Author", book.Author);
+                    con.Open();
+                    command.ExecuteNonQuery();
+                    book.Id = id;
+                }
+            }            
             return book;
         }
 
@@ -86,12 +85,35 @@ namespace ConsCRUD.Data
 
         public void Update(string id, Book book)
         {
-           
+            string sql = "UPDATE Books SET Id=@Id, Title=@Title, Author=@Author WHERE Id = @Id";
+            
+            using (var con = new SqlConnection(_conStr))
+            {
+                using (var command = new SqlCommand(sql, con))
+                {                    
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@Title", book.Title);
+                    command.Parameters.AddWithValue("@Author", book.Author);
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
+            }            
         }
 
         public void Delete(string id)
         {
-            
+            string sql = "DELETE FROM Books WHERE Id = @Id";
+
+            using (var con = new SqlConnection(_conStr))
+            {
+                using (var command = new SqlCommand(sql, con))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
         }
+
     }
 }

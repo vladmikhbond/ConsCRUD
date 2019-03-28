@@ -16,13 +16,16 @@ namespace ConsCRUD
             builder.AddJsonFile("appsettings.json");
             Configuration = builder.Build();
 
-            // service provider
+            // services provider
             IServiceCollection serviceCollection = new ServiceCollection();
             ///////
-            //serviceCollection.AddTransient<IRepo>(
-            //    (_) => new RepoMongo(Configuration["mongoString"]));
+            // serviceCollection.AddTransient<IRepo>(
+            //     (_) => new RepoMongo(Configuration["mongoString"]));
+            //
+            // serviceCollection.AddTransient<IRepo, RepoMemo>();
+
             serviceCollection.AddTransient<IRepo>(
-                (_) => new RepoAdo(Configuration["adoString"]));
+                (_) => new RepoAdoNet(Configuration["adoString"]));
             ///////
             Services = serviceCollection.BuildServiceProvider();
                   

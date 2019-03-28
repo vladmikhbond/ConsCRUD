@@ -110,8 +110,7 @@ namespace ConsCRUD.Controllers
             // do operation
             _repo.Delete(id);
             // show result
-            Console.WriteLine("Book was deleted.");
-            
+            Console.WriteLine("Book was deleted.");           
         }
 
     }
